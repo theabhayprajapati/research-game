@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* all div with borderraiidu 5px */
+div {
+    border-radius: 5px;
+}
