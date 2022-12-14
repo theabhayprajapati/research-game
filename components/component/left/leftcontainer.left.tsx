@@ -1,7 +1,11 @@
-import { useEffect, useRef, useState } from "react"
-import { MarioPlayer } from "../../characters/Mario.character"
-import { generateRandomBooleanState } from "../../level/LevelTwo.level"
-export const StopWatch = ({ setMarioCords, time, setTime, setMarioSide }) => {
+import { useEffect, useRef, useState } from "react";
+import { MarioPlayer } from "../../characters/Mario.character";
+import { generateRandomBooleanState } from "../../level/LevelTwo.level";
+export const StopWatch = ({ setMarioCords, time, setTime, setMarioSide, setScore }) => {
+
+    /* stop watch of seconds and milliseconds */
+    const [seconds, setSeconds] = useState(0);
+    const [milliseconds, setMilliseconds] = useState(0);
 
     const [isRunning, setIsRunning] = useState(true)
     const intervalRef = useRef(null)
@@ -22,32 +26,25 @@ export const StopWatch = ({ setMarioCords, time, setTime, setMarioSide }) => {
     useEffect(() => {
         if (isRunning) {
             intervalRef.current = setInterval(() => {
-                setTime(prevTime => prevTime + 1)
+                setTime((prev) => {
+                    const num = Number(prev) + 1;
+                    return num;
+                })
             }, 1000)
         } else {
             clearInterval(intervalRef.current)
         }
         return () => clearInterval(intervalRef.current)
     }, [isRunning])
-    /* check for space bar click event if it is clicked reset the mario */
 
     return (
         <div className="stopwatch-card card">
-            <h2>Stopwatch</h2>
-            <span className="stopwatch-time">{time}</span>
-            <div className="row">
-                {isRunning ? (
-                    <button onClick={() => setIsRunning(false)}>Stop</button>
-                ) : (
-                    <button onClick={() => setIsRunning(true)}>Start</button>
-                )}
-                <button onClick={reset}>Reset</button>
-            </div>
+            <span className="stopwatch-time font-semibold text-5xl">{time}</span>
         </div>
     )
 }
 
-const LeftContainer = () => {
+const LeftContainer = ({ setScore }) => {
     const [tunnelCords, setTunnelCords] = useState({
         x: 0,
         y: 0,
@@ -56,7 +53,7 @@ const LeftContainer = () => {
         x: 0,
         y: 0,
     })
-
+    const [marioSide, setMarioSide] = useState(false);
     const [time, setTime] = useState(0);
     const leftContainerRef = useRef(null)
 
@@ -114,8 +111,8 @@ const LeftContainer = () => {
                 }}
             >
             </div>
-            <StopWatch setMarioCords={setMarioCords} time={time} setTime={setTime} setMarioSide={undefined} />
-            <MarioPlayer xaxis={marioCords.x} yaxis={marioCords.y} setTime={setTime} setMarioSide={undefined} />
+            <StopWatch setScore={setScore} setMarioCords={setMarioCords} time={time} setTime={setTime} setMarioSide={setMarioSide} />
+            <MarioPlayer setScore={setScore} time={time} xaxis={marioCords.x} yaxis={marioCords.y} setTime={setTime} setMarioSide={setMarioSide} setMarioCords={setMarioCords}/>
         </div>
     )
 }

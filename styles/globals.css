@@ -2,7 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+/* improt google font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 /* all div with borderraiidu 5px */
+* {
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+/* make scrollbar like Macos */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* make scrollbar like Macos */
+
+
 div {
     border-radius: 5px;
 }
