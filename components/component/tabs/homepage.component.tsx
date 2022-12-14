@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAppContext } from "../../../context/AppContext";
 import LevelTwo from "../../level/LevelTwo.level";
-import LeftContainer from "../left/leftcontainer.left";
 import RightAside from "./right/Rightcard.right";
 
 const HomePage = () => {
     const [score, setScore] = useState([]);
-    const [gameModeOne, setGameModeOne] = useState(false);
+    const { gameModeOne, setGameModeOne } = useAppContext();
+    useEffect(() => {
+        return () => console.log("gamemodeone", gameModeOne);
+    }, [gameModeOne])
     return (
         <div className="container" style={{
             display: "grid",
@@ -14,9 +17,8 @@ const HomePage = () => {
             height: "90vh",
         }}>
             <RightAside setScore={setScore} scores={score} gameModeOne={gameModeOne} setGameModeOne={setGameModeOne} />
-            {
-                gameModeOne ? <LeftContainer setScore={setScore} /> : <LevelTwo setScore={setScore} />
-            }
+            <LevelTwo setScore={setScore} />
+
         </div>
 
     )
