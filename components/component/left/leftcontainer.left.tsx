@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { SPACEKEYCODE } from "../../../globals/constants";
-import { sleep } from "../../../globals/methods";
 import { MarioPlayer } from "../../characters/Mario.character";
 import Tunnel from "../../characters/Tunnel";
 import Message from "../Message";
@@ -14,6 +13,7 @@ type boardSizeT = {
     height: number | undefined;
     width: number | undefined;
 };
+var interval: any;
 const LeftContainer = ({ setScore }) => {
     const [tunnelCords, setTunnelCords] = useState({
         x: 0,
@@ -52,7 +52,7 @@ const LeftContainer = ({ setScore }) => {
 
     useEffect(() => {
         /* increase marios from top to bottom if bottom == 500px then make 0 */
-        const interval = setInterval(() => {
+        interval = setInterval(() => {
             // clearInterval(interval)
             setIsRunning(true);
             if (marioCords.y > 440) {
@@ -63,11 +63,32 @@ const LeftContainer = ({ setScore }) => {
                 setIsRunning(false);
                 setMilliseconds(0);
             }
-            setMarioCords({
-                ...marioCords,
-                x: tunnelCords.y ? tunnelCords.x : marioCords.x,
-                y: marioCords.y > 440 ? 0 : marioCords.y + 10,
-            });
+            // setMarioCords({
+            //     ...marioCords,
+            //     x: tunnelCords.y ? tunnelCords.x : marioCords.x,
+            //     y: marioCords.y > 440 ? 0 : marioCords.y + 10,
+            // });
+            // if else
+            if (marioCords.y > 440) {
+                setShowMario(false);
+                setTimeout(() => {
+                    setMarioCords({
+                        ...marioCords,
+                        y: 0,
+                    });
+                    setIsRunning(false);
+                    setMilliseconds(0);
+                    setShowMario(true);
+                }
+                    , 10000);
+            } else {
+                setMarioCords({
+                    ...marioCords,
+                    x: tunnelCords.y ? tunnelCords.x : marioCords.x,
+                    y: marioCords.y > 440 ? 0 : marioCords.y + 10,
+                });
+            }
+
         }, 100);
         return () => clearInterval(interval);
     }, [marioCords]);
@@ -81,7 +102,8 @@ const LeftContainer = ({ setScore }) => {
         if (event.keyCode === SPACEKEYCODE) {
             setShowMario(false);
             setMilliseconds(0);
-            sleep(0).then(() => {
+            clearInterval(interval)
+            setTimeout(() => {
                 var center = leftContainerRef.current.width / 2 - (MARIO_WIDTH / 2);
                 setMarioCords({
                     y: 0,
@@ -89,8 +111,7 @@ const LeftContainer = ({ setScore }) => {
                 })
                 setShowMario(true);
                 console.log(marioCords);
-            });
-
+            }, 10000);
         }
     };
 

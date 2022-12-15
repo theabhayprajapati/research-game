@@ -1,6 +1,6 @@
 
 import { useEffect, useRef, useState } from 'react';
-import { INITAL_MARIO_CORDS, INITAL_TUNNEL_CORDS, LEFTKEYCODE, MARIO_HEIGHT, MARIO_WIDTH, RIGHTKEYCODE, TUNNEL_HEIGHT, TUNNEL_WIDTH } from '../../../globals/constants';
+import { INITAL_MARIO_CORDS, INITAL_TUNNEL_CORDS, LEFTKEYCODE, MARIO_WIDTH, RIGHTKEYCODE, TUNNEL_HEIGHT, TUNNEL_WIDTH } from '../../../globals/constants';
 import { generateRandomBooleanState, randomNumberBW, sleep } from '../../../globals/methods';
 import { MarioPlayer } from '../../characters/Mario.character';
 import Tunnel from '../../characters/Tunnel';
@@ -9,6 +9,7 @@ import { Stopwatch } from '../Stopwatch';
 const debug = (message: any) => console.log(`[TwoTunnelLevel.tsx]`, message);
 
 type Side = 'left' | 'right';
+let interval: any;
 const TwoTunnelLevel = () => {
     const [showMario, setShowMario] = useState(false);
     const [tunnelOneCords, setTunnelOneCords] = useState(INITAL_TUNNEL_CORDS);
@@ -137,23 +138,42 @@ const TwoTunnelLevel = () => {
     };
     useEffect(() => {
         /* increase marios from top to bottom if bottom == 500px then make 0 */
-        const interval = setInterval(() => {
-            // clearInterval(interval)
-            setIsRunning(true);
-            if (marioCords.y > 440) {
-                setMarioCords({
-                    ...marioCords,
-                    y: 0,
-                });
+        interval = setInterval(() => {
+            console.log(marioCords);
+            /* use marioRef to get the x and y position and increase it */
+            const { height } = leftContainerRef.current.getBoundingClientRect();
+            const { y } = marioRef.current?.getBoundingClientRect() || 0;
+            if (y >= (400)) {
+                setShowMario(false);
                 setIsRunning(false);
+                setMilliseconds(0); 
                 setMilliseconds(0);
+                clearInterval(interval);
+                setTimeout(() => {
+                    const { width } = leftContainerRef.current.getBoundingClientRect();
+                    const marioXaxisLeft = (((width / 2) / 2) - MARIO_WIDTH / 2);
+                    const marioXaxisRight = (((width / 2) * 1.5) - MARIO_WIDTH / 2);
+                    const side = generateRandomBooleanState();
+                    debug(side);
+                    setMarioCords({
+                        y: 0,
+                        x: side === true ? marioXaxisLeft : marioXaxisRight,
+                    });
+                    setShowMario(true);
+                }, randomNumberBW(2000, 10000))
+            } else {
+                /* if mario is less than 5 show false */
+                if (marioCords.y < 10) {
+                    setShowMario(false);
+                } else {
+                    setShowMario(true);
+                }
+                setMarioCords({
+                    y: marioCords.y + 10,
+                    x: marioCords.x,
+                });
             }
-            setMarioCords({
-                ...marioCords,
-                x: tunnelOneCords.y ? tunnelOneCords.x : marioCords.x,
-                y: marioCords.y > 440 ? 0 : marioCords.y + 10,
-            });
-        }, 100);
+        }, 100)
         return () => clearInterval(interval);
     }, [marioCords]);
 

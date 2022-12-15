@@ -12,7 +12,7 @@ const AppContext = React.createContext(
 export const useAppContext = () => React.useContext(AppContext)
 
 export const AppContextProvider = ({ children }) => {
-    const [gameModeOne, setGameModeOne] = React.useState(true);
+    const [gameModeOne, setGameModeOne] = React.useState(false);
     const [gameStarted, setGameStarted] = React.useState(false);
     return (
         <AppContext.Provider value={{ gameModeOne, setGameModeOne, gameStarted, setGameStarted }}>
