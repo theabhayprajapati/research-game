@@ -1,6 +1,6 @@
 
 import { useEffect, useRef, useState } from 'react';
-import { INITAL_MARIO_CORDS, INITAL_TUNNEL_CORDS, LEFTKEYCODE, MARIO_HEIGHT, MARIO_WIDTH, RIGHTKEYCODE, TUNNEL_HEIGHT, TUNNEL_WIDTH } from '../../../globals/constants';
+import { INITAL_MARIO_CORDS, INITAL_TUNNEL_CORDS, LEFTKEYCODE, MARIO_WIDTH, RIGHTKEYCODE, TUNNEL_HEIGHT, TUNNEL_WIDTH } from '../../../globals/constants';
 import { generateRandomBooleanState, sleep } from '../../../globals/methods';
 import { MarioPlayer } from '../../characters/Mario.character';
 import Tunnel from '../../characters/Tunnel';
@@ -140,11 +140,15 @@ const TwoTunnelLevel = () => {
         const interval = setInterval(() => {
             // clearInterval(interval)
             debug(showMario);
-            if (marioCords.y === (leftContainerRef.current.clientHeight - MARIO_HEIGHT)) {
+            setIsRunning(true);
+
+            if (marioCords.y > (440)) {
                 setMarioCords({
                     ...marioCords,
                     y: 0,
                 })
+                setIsRunning(false);
+                setMilliseconds(0);
             }
             setMarioCords({
                 ...marioCords,

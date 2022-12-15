@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import HomePage from '../components/component/tabs/homepage.component';
 import { useAppContext } from '../context/AppContext';
 
@@ -12,6 +13,12 @@ export default function Home() {
 
   return (
     <div className='grid place-items-center h-screen p-10 '>
+      <Head >
+        <title>Game</title>
+        <meta name="description" content="Game" />
+        <link rel="icon" href="/favicon.ico" />
+
+      </Head>
       <button
         onClick={handleOnchange}
         className='absolute top-0 left-0 m-2 p-1 bg-green-500 rounded-md'
