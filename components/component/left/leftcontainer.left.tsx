@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { SPACEKEYCODE } from "../../../globals/constants";
+import { randomNumberBW } from "../../../globals/methods";
 import { MarioPlayer } from "../../characters/Mario.character";
 import Tunnel from "../../characters/Tunnel";
 import Message from "../Message";
@@ -63,12 +64,6 @@ const LeftContainer = ({ setScore }) => {
                 setIsRunning(false);
                 setMilliseconds(0);
             }
-            // setMarioCords({
-            //     ...marioCords,
-            //     x: tunnelCords.y ? tunnelCords.x : marioCords.x,
-            //     y: marioCords.y > 440 ? 0 : marioCords.y + 10,
-            // });
-            // if else
             if (marioCords.y > 440) {
                 setShowMario(false);
                 setTimeout(() => {
@@ -80,7 +75,7 @@ const LeftContainer = ({ setScore }) => {
                     setMilliseconds(0);
                     setShowMario(true);
                 }
-                    , 10000);
+                    , randomNumberBW(2000, 10000));
             } else {
                 setMarioCords({
                     ...marioCords,
@@ -111,7 +106,7 @@ const LeftContainer = ({ setScore }) => {
                 })
                 setShowMario(true);
                 console.log(marioCords);
-            }, 10000);
+            },  randomNumberBW(2000, 10000));
         }
     };
 

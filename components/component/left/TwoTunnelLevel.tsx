@@ -90,7 +90,7 @@ const TwoTunnelLevel = () => {
             debug("Wrong Side");
         }
         setMilliseconds(0);
-        setIsRunning(false);
+        clearInterval(interval);
         setTimeout(() => {
             const marioXaxisLeft = (((width / 2) / 2) - MARIO_WIDTH / 2);
             const marioXaxisRight = (((width / 2) * 1.5) - MARIO_WIDTH / 2);
@@ -121,7 +121,7 @@ const TwoTunnelLevel = () => {
 
         };
         setMilliseconds(0);
-        setIsRunning(false);
+        clearInterval(interval);
         setTimeout(() => {
             const marioXaxisLeft = (((width / 2) / 2) - MARIO_WIDTH / 2);
             const marioXaxisRight = (((width / 2) * 1.5) - MARIO_WIDTH / 2);
@@ -145,8 +145,7 @@ const TwoTunnelLevel = () => {
             const { y } = marioRef.current?.getBoundingClientRect() || 0;
             if (y >= (400)) {
                 setShowMario(false);
-                setIsRunning(false);
-                setMilliseconds(0); 
+                setMilliseconds(0);
                 setMilliseconds(0);
                 clearInterval(interval);
                 setTimeout(() => {
