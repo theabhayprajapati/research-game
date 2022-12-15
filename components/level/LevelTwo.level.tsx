@@ -1,196 +1,167 @@
 import { useEffect, useRef, useState } from "react";
-import { randomNumberBW } from "../../globals/methods";
+import { INITAL_MARIO_CORDS, INITAL_TUNNEL_CORDS, TUNNEL_HEIGHT, TUNNEL_WIDTH } from "../../globals/constants";
+import { generateRandomBooleanState, sleep } from "../../globals/methods";
+import { boardSizeT } from "../../globals/types";
 import { MarioPlayer } from "../characters/Mario.character";
-import { StopWatch } from "../component/left/leftcontainer.left";
+import Tunnel from "../characters/Tunnel";
+import { Stopwatch } from "../component/Stopwatch";
 
-/* generate random true false */
-export const generateRandomBooleanState = () => {
-    return Math.random() >= 0.5;
-};
-const MARIO_WIDTH = 50;
-const MARIO_HEIGHT = 50;
-const TUNNEL_WIDTH = 80;
-const TUNNEL_HEIGHT = 80;
-var BOARD_HEIGHT;
-var BOARD_WIDTH;
-type boardSizeT = {
-    height: number;
-    width: number;
-}
-var interval;
 const randomInitBool = generateRandomBooleanState();
 const LevelTwo = ({ setScore }) => {
-    // const [tunnelCords, setTunnelCords] = useState({
-    //     x: 0,
-    //     y: 0,
-    // });
-    const [tunnelOneCords, setTunnelOneCords] = useState({
-        x: 0,
-        y: 0,
+    const [showMario, setShowMario] = useState(false);
+    const [tunnelOneCords, setTunnelOneCords] = useState(INITAL_TUNNEL_CORDS);
+    const [tunnelTwoCords, setTunnelTwoCords] = useState(INITAL_TUNNEL_CORDS);
+    const [marioCords, setMarioCords] = useState(INITAL_MARIO_CORDS);
+    const [BoardMeasrment, setBoardMeasrment] = useState<boardSizeT>({
+        height: undefined,
+        width: undefined,
     });
-    const [tunnelTwoCords, setTunnelTwoCords] = useState({
-        x: 0,
-        y: 0,
-    });
-
-    const [marioCords, setMarioCords] = useState({
-        x: 0,
-        y: 0,
-    });
-    const [boardSize, setBoardSize] = useState<boardSizeT>({
-        height: 0,
-        width: 0,
-    });
+    const [isRunning, setIsRunning] = useState(false);
     const [marioSide, setMarioSide] = useState(randomInitBool);
     const [time, setTime] = useState("0");
     const leftContainerRef = useRef(null);
-    const leftTunnelRef = useRef(null);
-    const rightTunnelRef = useRef(null);
+    const [milliseconds, setMilliseconds] = useState(0);
+
 
     useEffect(() => {
+        setIsRunning(true);
         const height = leftContainerRef.current.clientHeight;
         const width = leftContainerRef.current.clientWidth;
-        console.log(height, width);
-        setBoardSize({
+        setBoardMeasrment({
             height,
             width,
         });
 
-        generateRandomBooleanState() ? setMarioSide(true) : setMarioSide(false);
         setTunnelOneCords({
-            x: width / 2 / 2 - TUNNEL_WIDTH / 2,
+            x: ((width / 2) / 2) - TUNNEL_WIDTH / 2,
             y: height - TUNNEL_HEIGHT,
         });
         setTunnelTwoCords({
-            x: (width / 2) * 1.5 + width / 2 - TUNNEL_WIDTH / 2,
+            x: ((width / 2) * 1.5) - (TUNNEL_WIDTH / 2),
             y: height - TUNNEL_HEIGHT,
         });
-        /* print */
-        console.log("tunnelOneCords", tunnelOneCords);
-        console.log("tunnelTwoCords", tunnelTwoCords);
-        /* consts */
-        console.log("width", width);
-        console.log({
-            MARIO_WIDTH,
+        sleep(0).then(() => {
+            var marioXaxisLeft = (((BoardMeasrment.width / 2) / 2) - MARIO_WIDTH / 2);
+            var marioXaxisRight = (((BoardMeasrment.width / 2) * 1.5) - MARIO_WIDTH / 2);
+
+            var side = generateRandomBooleanState();
+            setMarioCords({
+                y: 0,
+                x: side ? marioXaxisLeft : marioXaxisRight,
+            })
         });
-        setMarioSide(generateRandomBooleanState())
-        console.log("marioSide", marioSide);
-        setMarioCords({
-            y: 0,
-            x: marioSide ? (((width / 2) / 2) - MARIO_WIDTH / 2) : (((width / 2) * 1.5) - MARIO_WIDTH / 2),
-        });
-        return console.log("leftContainerRef.current", leftContainerRef.current);
     }, [leftContainerRef]);
 
-
     useEffect(() => {
-        /* increase marios from top to bottom if bottom == 500px then make 0 */
-        interval = setInterval(() => {
-            /* get xaxis of leftTunnelRef, RightTunnelRef */
-            setMarioCords({
-                ...marioCords,
-                x: 100,
-            });
-            /* y: marioCords.y > 440 ? 0 : marioCords.y + 10, */
-            if (marioCords.y > 440) {
-                setMarioCords({
-                    ...marioCords,
-                    y: 0,
-                });
-                console.log("Logging Mario...");
-            } else {
-                setMarioCords({
-                    ...marioCords,
-                    y: marioCords.y + 10,
-                });
-            }
-
-        }, 100);
-        return () => clearInterval(interval);
-    }, [marioCords]);
-
-    useEffect(() => {
-        // Listen for keydown events
-        document.addEventListener('keydown', handleClickRemoveMario);
-        // Clean up event listener on unmount
+        document.addEventListener("keydown", handleClickRemoveMario);
         return () => {
-            document.removeEventListener('keydown', handleClickRemoveMario);
+            document.removeEventListener("keydown", handleClickRemoveMario);
         };
     }, []);
 
-    const marioCreation = async () => {
-        console.log("marioCreation");
-        clearInterval(interval);
-        await sleep(randomNumberBW(2000, 100000));
-        setMarioSide(generateRandomBooleanState());
-        setMarioCords({
-            y: 0,
-            x: marioSide ? (((boardSize.width / 2) / 2) - MARIO_WIDTH / 2) : (((boardSize.width / 2) * 1.5) - MARIO_WIDTH / 2),
+    const marioCreation = () => {
+        setShowMario(false);
+        setMilliseconds(0);
+        var marioXaxisLeft = (((BoardMeasrment.width / 2) / 2) - MARIO_WIDTH / 2);
+        var marioXaxisRight = (((BoardMeasrment.width / 2) * 1.5) - MARIO_WIDTH / 2);
+        var pause: number;
+        // pause = randomNumberBW(2000, 10000);
+        pause = 0;
+        var side = generateRandomBooleanState();
+        sleep(pause).then(() => {
+            setShowMario(true);
+            setMarioCords({
+                y: 0,
+                x: side ? marioXaxisLeft : marioXaxisRight,
+            })
         });
-    }
-    /* track for handleClick Remove mario fn */
+    };
 
-    const handleClickRemoveMario = async (event) => {
+    const handleClickRemoveMario = (event) => {
         /* right arrow key */
+
         if (event.keyCode === 37) {
+            console.log(showMario);
+            setShowMario(false);
             if (marioSide == true) {
-                alert('Great Job!');
+                alert("Great Job!");
             } else {
-                alert('Wrong Side');
+                alert("Wrong Side");
             }
-            /* pause for 10 seconds */
-            await marioCreation();
-            await sleep(randomNumberBW(2000, 100000));
-
-        } else if (event.keyCode === 39) {
-
-            if (marioSide == false) {
-                await alert('Great Job!');
-
-            } else {
-                alert('Wrong Side');
-
-            }
-            await marioCreation();
-            await sleep(randomNumberBW(2000, 100000));
+            return marioCreation();
         }
-        return;
+        if (event.keyCode === 39) {
+            if (marioSide == false) {
+                alert("Great Job!");
+            } else {
+                alert("Wrong Side");
+            }
+            return marioCreation();
+        }
+    };
 
-    }
+    // useEffect(() => {
+    //     var interval = setInterval(async () => {
+    //         if (showMario == true && BoardMeasrment.width != undefined) {
 
+    //             setMarioCords({
+    //                 ...marioCords,
+    //                 x: 100
+    //             })
+    //             console.log(marioCords.y);
+    //             if (marioCords.y > 380) {
+    //                 marioCreation();
+    //             } else {
+    //                 setMarioCords({
+    //                     ...marioCords,
+    //                     y: marioCords.y + 10,
+    //                 });
+    //             }
+    //         }
+    //     }, 100);
+    //     return () => clearInterval(interval);
+    // }, [marioCords, BoardMeasrment]);
 
-    /* onclick sleep() and start set mario y 0 */
-    const sleep = (milliseconds) => {
-        return new Promise(resolve => setTimeout(resolve, milliseconds))
-    }
-
+    useEffect(() => {
+        /* increase marios from top to bottom if bottom == 500px then make 0 */
+        const interval = setInterval(() => {
+            // clearInterval(interval)
+            if (marioCords.y === 500) {
+                setMarioCords({
+                    ...marioCords,
+                    y: 0,
+                })
+            }
+            setMarioCords({
+                ...marioCords,
+                x: tunnelOneCords.y ? tunnelOneCords.x : marioCords.x,
+                y: marioCords.y > 440 ? 0 : marioCords.y + 10,
+            })
+        }, 100)
+        return () => clearInterval(interval)
+    }, [marioCords])
     return (
         <div
-            className="relative  col-span-2 border bg-green-400  w-[682px] md:h-[502px]"
+            className="relative  col-span-2 bg-green-400  w-full md:h-[502px]"
             ref={leftContainerRef}
+            style={{
+                backgroundImage: "url(https://researchone-game.vercel.app/images/bg2.webp)",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+            }}
         >
-            <div className="absolute flex justify-around bottom-0 left-0 right-0 border-dotted border-2 border-black h-20">
-                <div className="tunnel bg-blue-500 h-20 w-20"></div>
-                <div className="tunnel bg-gray-500 h-20 w-20"></div>
+            <div className="absolute flex justify-around bottom-0 left-0 right-0">
+                <Tunnel xaxis={tunnelOneCords.x} yaxis={tunnelOneCords.y} />
+                <Tunnel xaxis={tunnelTwoCords.x} yaxis={tunnelTwoCords.y} />
             </div>
-            <StopWatch
-                setScore={setScore}
-                setMarioSide={setMarioSide}
-                setMarioCords={setMarioCords}
-                time={time}
-                setTime={setTime}
-            />
-            <MarioPlayer
-                xaxis={marioCords.x}
-                yaxis={marioCords.y}
-                setMarioCords={setMarioCords}
-                setTime={setTime}
-                setScore={setScore}
-                time={time}
-                handleClickRemoveMario={() => {
-                    console.log("clicked");
-                }}
-            />
+            <Stopwatch isRunning={isRunning} milliseconds={milliseconds} setMilliseconds={setMilliseconds} />
+            {showMario && (BoardMeasrment.width != undefined) && (
+                <MarioPlayer
+                    xaxis={marioCords.x}
+                    yaxis={marioCords.y}
+                />
+            )}
         </div>
     );
 };

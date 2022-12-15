@@ -1,4 +1,3 @@
-import Switch from "../../elements/Switch";
 
 const RightAside = ({ setScore, scores, gameModeOne, setGameModeOne }) => {
 
@@ -28,33 +27,10 @@ const RightAside = ({ setScore, scores, gameModeOne, setGameModeOne }) => {
                 <div className="game-mode-selection__title">
                     <h1 className="text-2xl font-bold">Game Mode</h1>
                 </div>
-                <Switch />
-                <div className="game-mode-selection__options p-2">
-                    <div className="game-mode-selection__option">
-                        <input
-                            type="radio"
-                            name="game-mode"
-                            id="game-mode-1"
-                            value="game-mode-1"
-                            /* default true */
-                            checked={gameModeOne}
-                            onChange={() => setGameModeOne(true)}
-                        />
-                        <label htmlFor="game-mode-1"> Mode 1</label>
-                    </div>
-                    <div className="game-mode-selection__option">
-                        <input
-                            type="radio"
-                            name="game-mode"
-                            id="game-mode-2"
-                            value="game-mode-2"
-                            checked={gameModeOne}
-                            onChange={() => setGameModeOne(false)}
-                        />
-                        <label htmlFor="game-mode-2"> Mode 2</label>
-                    </div>
+                <button onClick={() => setGameModeOne(!gameModeOne)}>
+                    {gameModeOne ? "true" : "false"}
+                </button>
 
-                </div>
 
             </div>
             <div className="border ">
