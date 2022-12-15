@@ -3,6 +3,7 @@ import { SPACEKEYCODE } from "../../../globals/constants";
 import { sleep } from "../../../globals/methods";
 import { MarioPlayer } from "../../characters/Mario.character";
 import Tunnel from "../../characters/Tunnel";
+import Message from "../Message";
 import { Stopwatch } from "../Stopwatch";
 
 const MARIO_WIDTH = 50;
@@ -103,8 +104,12 @@ const LeftContainer = ({ setScore }) => {
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
+                zIndex: -1,
             }}
         >
+            <Message>
+                Press <span className="text-black">space</span> to catch <span className="text-red-800">Mario</span>
+            </Message>
             <Tunnel
                 xaxis={tunnelCords.x}
                 yaxis={tunnelCords.y}
@@ -118,6 +123,7 @@ const LeftContainer = ({ setScore }) => {
                 setMilliseconds={setMilliseconds}
             />
             {showMario && <MarioPlayer xaxis={marioCords.x} yaxis={marioCords.y} />}
+
         </div>
     );
 };

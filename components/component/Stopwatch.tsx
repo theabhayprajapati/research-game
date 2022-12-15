@@ -32,7 +32,11 @@ export const Stopwatch = ({ isRunning, milliseconds, setMilliseconds }) => {
     const centiseconds = Math.floor((duration % 1000) / 10);
 
     return (
-        <div className='m-5'>
+        <div className='m-5'
+            style={{
+                zIndex: 100,
+            }}
+        >
             <p className='font-bold text-4xl'>
                 {seconds}.{centiseconds}
             </p>

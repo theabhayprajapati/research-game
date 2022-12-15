@@ -1,9 +1,10 @@
 
 import { useEffect, useRef, useState } from 'react';
-import { INITAL_MARIO_CORDS, INITAL_TUNNEL_CORDS, LEFTKEYCODE, MARIO_WIDTH, RIGHTKEYCODE, TUNNEL_HEIGHT, TUNNEL_WIDTH } from '../../../globals/constants';
-import { generateRandomBooleanState, sleep } from '../../../globals/methods';
+import { INITAL_MARIO_CORDS, INITAL_TUNNEL_CORDS, LEFTKEYCODE, MARIO_HEIGHT, MARIO_WIDTH, RIGHTKEYCODE, TUNNEL_HEIGHT, TUNNEL_WIDTH } from '../../../globals/constants';
+import { generateRandomBooleanState, randomNumberBW, sleep } from '../../../globals/methods';
 import { MarioPlayer } from '../../characters/Mario.character';
 import Tunnel from '../../characters/Tunnel';
+import Message from '../Message';
 import { Stopwatch } from '../Stopwatch';
 const debug = (message: any) => console.log(`[TwoTunnelLevel.tsx]`, message);
 
@@ -101,7 +102,7 @@ const TwoTunnelLevel = () => {
             setIsRunning(true);
             setShowMario(true);
             debug(marioCords);
-        }, 0);
+        }, randomNumberBW(2000, 10000));
 
     };
 
@@ -132,31 +133,29 @@ const TwoTunnelLevel = () => {
             setIsRunning(true);
             setShowMario(true);
             debug(marioCords);
-        }, 0);
+        }, randomNumberBW(2000, 10000));
     };
-
     useEffect(() => {
         /* increase marios from top to bottom if bottom == 500px then make 0 */
         const interval = setInterval(() => {
             // clearInterval(interval)
-            debug(showMario);
             setIsRunning(true);
-
-            if (marioCords.y > (440)) {
+            if (marioCords.y > 440) {
                 setMarioCords({
                     ...marioCords,
                     y: 0,
-                })
+                });
                 setIsRunning(false);
                 setMilliseconds(0);
             }
             setMarioCords({
                 ...marioCords,
+                x: tunnelOneCords.y ? tunnelOneCords.x : marioCords.x,
                 y: marioCords.y > 440 ? 0 : marioCords.y + 10,
-            })
-        }, 100)
-        return () => clearInterval(interval)
-    }, [marioCords])
+            });
+        }, 100);
+        return () => clearInterval(interval);
+    }, [marioCords]);
 
     return (
         <div
@@ -167,10 +166,15 @@ const TwoTunnelLevel = () => {
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
+                zIndex: -1,
                 /* light green color over the image */
                 backgroundColor: marioSide ? "red" : "blue",
             }}
         >
+
+            <Message>
+                Use <kbd>{'<'}</kbd> and <kbd>{'>'}</kbd> to catch the <span className="text-red-800">Mario</span> for that side.
+            </Message>
             <div className="absolute flex justify-around bottom-0 left-0 right-0">
                 <Tunnel xaxis={tunnelOneCords.x} yaxis={tunnelOneCords.y} />
                 <Tunnel xaxis={tunnelTwoCords.x} yaxis={tunnelTwoCords.y} />
