@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 
+let interval;
 export const Stopwatch = ({ isRunning, milliseconds, setMilliseconds }) => {
-
     const [duration, setDuration] = useState(milliseconds);
 
     useEffect(() => {
-        let interval = null;
         if (isRunning) {
             interval = setInterval(() => {
+                console.log(duration + " : " + milliseconds);
                 setMilliseconds((prev: number) => prev + 100);
             }, 100);
         } else if (!isRunning && milliseconds !== 0) {
@@ -28,17 +28,14 @@ export const Stopwatch = ({ isRunning, milliseconds, setMilliseconds }) => {
         return () => clearInterval(interval);
     }, [isRunning, milliseconds]);
 
-    const seconds = Math.floor(duration / 1000);
-    const centiseconds = Math.floor((duration % 1000) / 10);
-
     return (
         <div className='m-5'
             style={{
                 zIndex: 100,
             }}
         >
-            <p className='font-bold text-4xl'>
-                {seconds}.{centiseconds}
+            <p className='font-bold text-4xl' id="stopwatch">
+                {milliseconds}
             </p>
         </div>
     );

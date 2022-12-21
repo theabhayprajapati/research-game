@@ -1,5 +1,11 @@
+/* 
+// TODO: 1st - Close the timer when the hit the tunnel end || user presses < > keys
+// TODO: 2nd - Recored the scores.
+*/
+
 
 import { useEffect, useRef, useState } from 'react';
+import { useAppContext } from '../../../context/AppContext';
 import { INITAL_MARIO_CORDS, INITAL_TUNNEL_CORDS, LEFTKEYCODE, MARIO_WIDTH, RIGHTKEYCODE, TUNNEL_HEIGHT, TUNNEL_WIDTH } from '../../../globals/constants';
 import { generateRandomBooleanState, randomNumberBW, sleep } from '../../../globals/methods';
 import { MarioPlayer } from '../../characters/Mario.character';
@@ -16,11 +22,12 @@ const TwoTunnelLevel = () => {
     const [tunnelTwoCords, setTunnelTwoCords] = useState(INITAL_TUNNEL_CORDS);
     const [marioCords, setMarioCords] = useState(INITAL_MARIO_CORDS);
     const [isRunning, setIsRunning] = useState(false);
-    const [marioSide, setMarioSide] = useState(true);
+    const [marioSide, setMarioSide] = useState<Side>('left');
     const [currentSide, setCurrentSide] = useState<Side>('left');
     const [milliseconds, setMilliseconds] = useState(0);
     const leftContainerRef = useRef(null);
     const marioRef = useRef(null);
+    const { updateDoubleReactionTestScores } = useAppContext();
     useEffect(() => {
         setIsRunning(true);
         const { height, width } = leftContainerRef.current.getBoundingClientRect();
@@ -34,8 +41,7 @@ const TwoTunnelLevel = () => {
         });
         var side = generateRandomBooleanState();
         setShowMario(true);
-        setMarioSide((prev) => side);
-        setCurrentSide(side == true ? 'left' : 'right');
+        setMarioSide(side == true ? 'left' : 'right');
         sleep(0).then(() => {
             console.log(width);
             var marioXaxisLeft = (((width / 2) / 2) - MARIO_WIDTH / 2);
@@ -80,15 +86,12 @@ const TwoTunnelLevel = () => {
 
     const handleLeftKey = (event) => {
         const { width } = leftContainerRef.current.getBoundingClientRect();
+        setIsRunning(false);
         setShowMario(false);
+        console.log(milliseconds + "left" + document.getElementById("stopwatch").innerText);
+        updateDoubleReactionTestScores(Number.parseInt(document.getElementById("stopwatch").innerText));
         debug({ key: event.keyCode, LEFTKEYCODE, marioSide });
-        if (getMarioSide() === false) {
-            alert("Great Job!");
-            debug("Great Job!");
-        } else {
-            alert("Wrong Side");
-            debug("Wrong Side");
-        }
+        let marioCurrentSide = getMarioSide() ? 'left' : 'right';
         setMilliseconds(0);
         clearInterval(interval);
         setTimeout(() => {
@@ -111,15 +114,10 @@ const TwoTunnelLevel = () => {
     const handleRightKey = (event) => {
         const { width } = leftContainerRef.current.getBoundingClientRect();
         setShowMario(false);
+        setIsRunning(false);
+        updateDoubleReactionTestScores(Number.parseInt(document.getElementById("stopwatch").innerText));
         debug({ key: event.keyCode, RIGHTKEYCODE, marioSide });
-        if (getMarioSide() === true) {
-            alert("Great Job!");
-            debug("Great Job!");
-        } else {
-            alert("Wrong Side");
-            debug("Wrong Side");
-
-        };
+        let marioCurrentSide = getMarioSide() ? 'left' : 'right';
         setMilliseconds(0);
         clearInterval(interval);
         setTimeout(() => {
@@ -144,9 +142,11 @@ const TwoTunnelLevel = () => {
             const { height } = leftContainerRef.current.getBoundingClientRect();
             const { y } = marioRef.current?.getBoundingClientRect() || 0;
             if (y >= (400)) {
+                console.log("Milliseconds: ", milliseconds);
+                updateDoubleReactionTestScores(Number.parseInt(document.getElementById("stopwatch").innerText));
                 setShowMario(false);
                 setMilliseconds(0);
-                setMilliseconds(0);
+                setIsRunning(false);
                 clearInterval(interval);
                 setTimeout(() => {
                     const { width } = leftContainerRef.current.getBoundingClientRect();
@@ -159,6 +159,8 @@ const TwoTunnelLevel = () => {
                         x: side === true ? marioXaxisLeft : marioXaxisRight,
                     });
                     setShowMario(true);
+                    setMilliseconds(0);
+                    setIsRunning(true);
                 }, randomNumberBW(2000, 10000))
             } else {
                 /* if mario is less than 5 show false */

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useAppContext } from "../../../context/AppContext";
 import { SPACEKEYCODE } from "../../../globals/constants";
 import { randomNumberBW } from "../../../globals/methods";
 import { MarioPlayer } from "../../characters/Mario.character";
@@ -27,6 +28,7 @@ const LeftContainer = ({ setScore }) => {
     const [showMario, setShowMario] = useState(false);
     const [isRunning, setIsRunning] = useState(false);
     const [milliseconds, setMilliseconds] = useState(0);
+    const { simpleReactionTestScores, updateSimpleReactionTestScores } = useAppContext();
     const [time, setTime] = useState(0);
     const leftContainerRef = useRef(null);
     const [BoardMeasrment, setBoardMeasrment] = useState<boardSizeT>({
@@ -43,7 +45,6 @@ const LeftContainer = ({ setScore }) => {
             x: width / 2 - TUNNEL_WIDTH / 2,
             y: height - TUNNEL_HEIGHT,
         });
-
         setMarioCords({
             y: 0,
             x: width / 2 - MARIO_WIDTH / 2,
@@ -54,28 +55,21 @@ const LeftContainer = ({ setScore }) => {
     useEffect(() => {
         /* increase marios from top to bottom if bottom == 500px then make 0 */
         interval = setInterval(() => {
-            // clearInterval(interval)
-            setIsRunning(true);
             if (marioCords.y > 440) {
-                setMarioCords({
-                    ...marioCords,
-                    y: 0,
-                });
+                updateSimpleReactionTestScores(milliseconds);
+                setShowMario(false);
                 setIsRunning(false);
                 setMilliseconds(0);
-            }
-            if (marioCords.y > 440) {
-                setShowMario(false);
+                clearInterval(interval);
                 setTimeout(() => {
                     setMarioCords({
                         ...marioCords,
                         y: 0,
                     });
-                    setIsRunning(false);
+                    setIsRunning(true);
                     setMilliseconds(0);
                     setShowMario(true);
-                }
-                    , randomNumberBW(2000, 10000));
+                }, randomNumberBW(2000, 10000));
             } else {
                 setMarioCords({
                     ...marioCords,
@@ -83,7 +77,6 @@ const LeftContainer = ({ setScore }) => {
                     y: marioCords.y > 440 ? 0 : marioCords.y + 10,
                 });
             }
-
         }, 100);
         return () => clearInterval(interval);
     }, [marioCords]);
@@ -95,18 +88,24 @@ const LeftContainer = ({ setScore }) => {
     }, []);
     const handleClickRemoveMario = (event) => {
         if (event.keyCode === SPACEKEYCODE) {
+            updateSimpleReactionTestScores(milliseconds);
             setShowMario(false);
-            setMilliseconds(0);
-            clearInterval(interval)
+            setIsRunning(false);
+            // setMilliseconds(0);
+            clearInterval(interval);
             setTimeout(() => {
-                var center = leftContainerRef.current.width / 2 - (MARIO_WIDTH / 2);
+                console.log(leftContainerRef.current.width)
+                var center = (leftContainerRef.current.width / 2) - (MARIO_WIDTH / 2);
+                console.log(center);
                 setMarioCords({
                     y: 0,
                     x: center,
-                })
+                });
                 setShowMario(true);
+                setIsRunning(true);
+                setMilliseconds(0);
                 console.log(marioCords);
-            },  randomNumberBW(2000, 10000));
+            }, randomNumberBW(2000, 10000));
         }
     };
 
@@ -124,7 +123,8 @@ const LeftContainer = ({ setScore }) => {
             }}
         >
             <Message>
-                Press <span className="text-black">space</span> to catch <span className="text-red-800">Mario</span>
+                Press <span className="text-black">space</span> to catch{" "}
+                <span className="text-red-800">Mario</span>
             </Message>
             <Tunnel
                 xaxis={tunnelCords.x}
@@ -139,9 +139,8 @@ const LeftContainer = ({ setScore }) => {
                 setMilliseconds={setMilliseconds}
             />
             {showMario && <MarioPlayer xaxis={marioCords.x} yaxis={marioCords.y} />}
-
         </div>
     );
 };
 
-export default LeftContainer; 
+export default LeftContainer;
