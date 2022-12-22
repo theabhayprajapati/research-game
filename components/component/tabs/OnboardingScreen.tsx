@@ -1,7 +1,7 @@
 
 const OnboardingScreen = () => {
     return (
-        <div className="relative grid place-items-center bg-green-400  w-full md:h-[502px]">
+        <div className="relative grid place-items-center bg-green-400  min-w-full md:h-[502px]">
             <h1 className="text-4xl font-bold">
                 Press <kbd>space</kbd> to start
             </h1>

@@ -16,7 +16,7 @@ type boardSizeT = {
     width: number | undefined;
 };
 var interval: any;
-const LeftContainer = ({ setScore }) => {
+const SimpleReactionTestFN = ({ setScore }) => {
     const [tunnelCords, setTunnelCords] = useState({
         x: 0,
         y: 0,
@@ -143,4 +143,4 @@ const LeftContainer = ({ setScore }) => {
     );
 };
 
-export default LeftContainer;
+export default SimpleReactionTestFN;

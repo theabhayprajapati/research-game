@@ -12,6 +12,11 @@ const AppContext = React.createContext(
         setDoubleReactionTestScores: any => { },
         updateSimpleReactionTestScores: any => { },
         updateDoubleReactionTestScores: any => { },
+        testNumbers: {
+            simpleReactionTest: 1,
+            doubleReactionTest: 1
+        },
+        setTestNumbers: any => { }
     }
 )
 
@@ -34,12 +39,19 @@ export const AppContextProvider = ({ children }) => {
     const [gameModeOne, setGameModeOne] = React.useState(true);
     const [gameStarted, setGameStarted] = React.useState(false);
     const [simpleReactionTestScores, setSimpleReactionTestScores] = React.useState<scoreT[]>([]);
+    const [testNumbers, setTestNumbers] = React.useState({
+        simpleReactionTest: 1,
+        doubleReactionTest: 1
+    })
     const updateSimpleReactionTestScores = (mill: number) => {
         console.log(mill, "called");
+        console.log(testNumbers);
+        setTestNumbers(prev => ({ ...prev, simpleReactionTest: prev.simpleReactionTest + 1 }))
         const score = {
-            testNumber: simpleReactionTestScores.length + 1,
+            testNumber: Number.parseInt(document.getElementById('simpleReactionTestScore').innerText),
             reactionTime: mill
         }
+
         setSimpleReactionTestScores(prev => [...prev, score]);
         /* print */
         console.log("simpleReactionTestScores", simpleReactionTestScores);
@@ -47,12 +59,16 @@ export const AppContextProvider = ({ children }) => {
 
     const [doubleReactionTestScores, setDoubleReactionTestScores] = React.useState<scoreT[]>([]);
     const updateDoubleReactionTestScores = (mill: number) => {
-        console.log(doubleReactionTestScores, "called")
+        console.log(mill, "called");
+        console.log(testNumbers);
+        setTestNumbers(prev => ({ ...prev, doubleReactionTest: prev.doubleReactionTest + 1 }))
         const score = {
-            testNumber: doubleReactionTestScores.length + 1,
+            testNumber: Number.parseInt(document.getElementById('doubleReactionTestScore').innerText),
             reactionTime: mill
         }
+
         setDoubleReactionTestScores(prev => [...prev, score]);
+        /* print */
         console.log("doubleReactionTestScores", doubleReactionTestScores);
     }
 
@@ -60,7 +76,8 @@ export const AppContextProvider = ({ children }) => {
         <AppContext.Provider value={{
             gameModeOne, setGameModeOne, gameStarted, setGameStarted,
             simpleReactionTestScores, setSimpleReactionTestScores, doubleReactionTestScores, setDoubleReactionTestScores,
-            updateSimpleReactionTestScores, updateDoubleReactionTestScores
+            updateSimpleReactionTestScores, updateDoubleReactionTestScores,
+            testNumbers, setTestNumbers
         }}>
             {children}
         </AppContext.Provider>
