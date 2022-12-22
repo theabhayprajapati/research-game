@@ -16,6 +16,7 @@ type boardSizeT = {
     width: number | undefined;
 };
 var interval: any;
+const pauseMoment = [0,0]
 const SimpleReactionTestFN = ({ setScore }) => {
     const [tunnelCords, setTunnelCords] = useState({
         x: 0,
@@ -56,7 +57,7 @@ const SimpleReactionTestFN = ({ setScore }) => {
         /* increase marios from top to bottom if bottom == 500px then make 0 */
         interval = setInterval(() => {
             if (marioCords.y > 440) {
-                updateSimpleReactionTestScores(milliseconds);
+                updateSimpleReactionTestScores(Number.parseInt(document.getElementById("stopwatch").innerText));
                 setShowMario(false);
                 setIsRunning(false);
                 setMilliseconds(0);
@@ -69,7 +70,7 @@ const SimpleReactionTestFN = ({ setScore }) => {
                     setIsRunning(true);
                     setMilliseconds(0);
                     setShowMario(true);
-                }, randomNumberBW(2000, 10000));
+                }, randomNumberBW(0,0));
             } else {
                 setMarioCords({
                     ...marioCords,
@@ -88,7 +89,7 @@ const SimpleReactionTestFN = ({ setScore }) => {
     }, []);
     const handleClickRemoveMario = (event) => {
         if (event.keyCode === SPACEKEYCODE) {
-            updateSimpleReactionTestScores(milliseconds);
+            updateSimpleReactionTestScores(Number.parseInt(document.getElementById("stopwatch").innerText));
             setShowMario(false);
             setIsRunning(false);
             // setMilliseconds(0);
@@ -105,7 +106,7 @@ const SimpleReactionTestFN = ({ setScore }) => {
                 setIsRunning(true);
                 setMilliseconds(0);
                 console.log(marioCords);
-            }, randomNumberBW(2000, 10000));
+            }, randomNumberBW(0,0));
         }
     };
 

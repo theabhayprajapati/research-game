@@ -16,7 +16,9 @@ const AppContext = React.createContext(
             simpleReactionTest: 1,
             doubleReactionTest: 1
         },
-        setTestNumbers: any => { }
+        setTestNumbers: any => { },
+        gameOver: false,
+        setGameOver: any => { }
     }
 )
 
@@ -36,8 +38,9 @@ type GameScoreType = {
     }
 }
 export const AppContextProvider = ({ children }) => {
-    const [gameModeOne, setGameModeOne] = React.useState(true);
+    const [gameModeOne, setGameModeOne] = React.useState(false);
     const [gameStarted, setGameStarted] = React.useState(false);
+    const [gameOver, setGameOver] = React.useState(false);
     const [simpleReactionTestScores, setSimpleReactionTestScores] = React.useState<scoreT[]>([]);
     const [testNumbers, setTestNumbers] = React.useState({
         simpleReactionTest: 1,
@@ -71,12 +74,27 @@ export const AppContextProvider = ({ children }) => {
         /* print */
         console.log("doubleReactionTestScores", doubleReactionTestScores);
     }
+    React.useEffect(() => {
+        if (testNumbers.simpleReactionTest > 5) {
+            setTimeout(() => {
+                return setGameModeOne(true);
+            }, 1000)
+        }
+        if (testNumbers.doubleReactionTest > 5) {
+            setTimeout(() => {
+                setGameStarted(false);
+                return setGameOver(true);
+            }, 1000)
+        }
+        return;
+    }, [testNumbers])
 
     return (
         <AppContext.Provider value={{
             gameModeOne, setGameModeOne, gameStarted, setGameStarted,
             simpleReactionTestScores, setSimpleReactionTestScores, doubleReactionTestScores, setDoubleReactionTestScores,
             updateSimpleReactionTestScores, updateDoubleReactionTestScores,
+            gameOver, setGameOver,
             testNumbers, setTestNumbers
         }}>
             {children}

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useAppContext } from "../../../context/AppContext";
+import GameOverScreeen from "../GameOver";
 import SimpleReactionTestFN from "../left/SimpleReactionTestFN.left";
 import TwoTunnelLevel from "../left/TwoTunnelLevel";
 import OnboardingScreen from "./OnboardingScreen";
 
 const HomePage = () => {
     const [score, setScore] = useState([]);
-    const { gameModeOne, setGameModeOne, gameStarted, setGameStarted, simpleReactionTestScores, doubleReactionTestScores } = useAppContext();
+    const { gameModeOne, setGameModeOne, gameStarted, setGameStarted, simpleReactionTestScores, doubleReactionTestScores, gameOver } = useAppContext();
     useEffect(() => {
         return () => console.log("gamemodeone", gameModeOne);
     }, [gameModeOne]);
@@ -43,7 +44,13 @@ const HomePage = () => {
                     ) : (
                         <SimpleReactionTestFN setScore={setScore} />
                     )
-                ) : <OnboardingScreen />
+                ) : (
+                    gameOver ? (
+                        <GameOverScreeen />
+                    ) : (
+                        <OnboardingScreen />
+                    )
+                )
             }
             <section className="h-[100vh] grid grid-cols-2 ">
                 {/* simple  */}
