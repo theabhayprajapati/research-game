@@ -106,7 +106,7 @@ const SimpleReactionTestFN = ({ setScore }) => {
                 setIsRunning(true);
                 setMilliseconds(0);
                 console.log(marioCords);
-            }, randomNumberBW(0,0));
+            }, randomNumberBW(2000,10000));
         }
     };
 
