@@ -3,6 +3,8 @@ import React from 'react';
 const AppContext = React.createContext(
     {
         gameModeOne: true,
+        user: {},
+        setUser: any => { },
         setGameModeOne: any => { },
         gameStarted: false,
         setGameStarted: any => { },
@@ -41,6 +43,10 @@ export const AppContextProvider = ({ children }) => {
     const [gameModeOne, setGameModeOne] = React.useState(false);
     const [gameStarted, setGameStarted] = React.useState(false);
     const [gameOver, setGameOver] = React.useState(false);
+    const [user, setUser] = React.useState({
+        name: "",
+        age: 0,
+    });
     const [simpleReactionTestScores, setSimpleReactionTestScores] = React.useState<scoreT[]>([]);
     const [testNumbers, setTestNumbers] = React.useState({
         simpleReactionTest: 1,
@@ -109,7 +115,7 @@ export const AppContextProvider = ({ children }) => {
             simpleReactionTestScores, setSimpleReactionTestScores, doubleReactionTestScores, setDoubleReactionTestScores,
             updateSimpleReactionTestScores, updateDoubleReactionTestScores,
             gameOver, setGameOver,
-            testNumbers, setTestNumbers
+            testNumbers, setTestNumbers, user, setUser
         }}>
             {children}
         </AppContext.Provider>
