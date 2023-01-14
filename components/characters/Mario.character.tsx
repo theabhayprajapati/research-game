@@ -8,6 +8,7 @@ export const MarioPlayer = ({ xaxis, yaxis, marioRef }: MarioPlayerPropsT) => {
     return (
         <div className="mario"
             ref={marioRef}
+            id="mario-man"
             style={{
                 backgroundImage: "url(https://researchone-game.vercel.app/images/mario.png)",
                 backgroundSize: "cover",

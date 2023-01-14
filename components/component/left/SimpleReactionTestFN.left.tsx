@@ -57,7 +57,6 @@ const SimpleReactionTestFN = ({ setScore }) => {
         /* increase marios from top to bottom if bottom == 500px then make 0 */
         interval = setInterval(() => {
             if (marioCords.y > 440) {
-                updateSimpleReactionTestScores(Number.parseInt(document.getElementById("stopwatch").innerText));
                 setShowMario(false);
                 setIsRunning(false);
                 setMilliseconds(0);
