@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useAppContext } from "../../../context/AppContext";
 import { SPACEKEYCODE } from "../../../globals/constants";
-import { randomNumberBW } from "../../../globals/methods";
+import { customRandomNumber, randomNumberBW } from "../../../globals/methods";
 import { MarioPlayer } from "../../characters/Mario.character";
 import Tunnel from "../../characters/Tunnel";
 import Message from "../Message";
@@ -16,7 +16,7 @@ type boardSizeT = {
     width: number | undefined;
 };
 var interval: any;
-const pauseMoment = [0,0]
+const pauseMoment = [0, 0]
 const SimpleReactionTestFN = ({ setScore }) => {
     const [tunnelCords, setTunnelCords] = useState({
         x: 0,
@@ -69,7 +69,7 @@ const SimpleReactionTestFN = ({ setScore }) => {
                     setIsRunning(true);
                     setMilliseconds(0);
                     setShowMario(true);
-                }, randomNumberBW(0,0));
+                }, customRandomNumber());
             } else {
                 setMarioCords({
                     ...marioCords,
@@ -81,7 +81,7 @@ const SimpleReactionTestFN = ({ setScore }) => {
         return () => clearInterval(interval);
     }, [marioCords]);
     useEffect(() => {
-          document.addEventListener("keydown", handleClickRemoveMario);
+        document.addEventListener("keydown", handleClickRemoveMario);
         return () => {
             document.removeEventListener("keydown", handleClickRemoveMario);
         };
@@ -105,7 +105,7 @@ const SimpleReactionTestFN = ({ setScore }) => {
                 setIsRunning(true);
                 setMilliseconds(0);
                 console.log(marioCords);
-            }, randomNumberBW(0,0));
+            }, customRandomNumber());
         }
     };
 

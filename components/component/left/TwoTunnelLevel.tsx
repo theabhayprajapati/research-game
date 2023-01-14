@@ -7,7 +7,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAppContext } from '../../../context/AppContext';
 import { INITAL_MARIO_CORDS, INITAL_TUNNEL_CORDS, LEFTKEYCODE, MARIO_WIDTH, RIGHTKEYCODE, TUNNEL_HEIGHT, TUNNEL_WIDTH } from '../../../globals/constants';
-import { generateRandomBooleanState, randomNumberBW, sleep } from '../../../globals/methods';
+import { customRandomNumber, generateRandomBooleanState, sleep } from '../../../globals/methods';
 import { MarioPlayer } from '../../characters/Mario.character';
 import Tunnel from '../../characters/Tunnel';
 import Message from '../Message';
@@ -106,7 +106,7 @@ const TwoTunnelLevel = () => {
             setIsRunning(true);
             setShowMario(true);
             debug(marioCords);
-        }, randomNumberBW(2000, 10000));
+        }, customRandomNumber());
 
     };
 
@@ -132,7 +132,7 @@ const TwoTunnelLevel = () => {
             setIsRunning(true);
             setShowMario(true);
             debug(marioCords);
-        }, randomNumberBW(2000, 10000));
+        }, customRandomNumber());
     };
     useEffect(() => {
         /* increase marios from top to bottom if bottom == 500px then make 0 */
@@ -160,7 +160,7 @@ const TwoTunnelLevel = () => {
                     setShowMario(true);
                     setMilliseconds(0);
                     setIsRunning(true);
-                }, randomNumberBW(2000, 10000))
+                }, customRandomNumber());
             } else {
                 /* if mario is less than 5 show false */
                 if (marioCords.y < 10) {
