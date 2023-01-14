@@ -15,10 +15,14 @@
 */
 // to csv
 
-const convertToCSV = (objArray: any, ObjArray2) => {
+import { TUser } from "./types";
+
+const convertToCSV = (objArray: any, ObjArray2: any, user:TUser) => {
     const array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
     const array2 = typeof ObjArray2 != 'object' ? JSON.parse(ObjArray2) : ObjArray2;
-    let str = 'Simple Reaction Test \rTest Number,Reaction Time\r';
+    let str = 'Name,Age, \r';
+    str += user.name + ',' + user.age + ' \r \r';
+    str = 'Simple Reaction Test \rTest Number,Reaction Time\r';
     for (let i = 0; i < array.length; i++) {
         let line = '';
         for (let index in array[i]) {

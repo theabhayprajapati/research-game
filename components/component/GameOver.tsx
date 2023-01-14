@@ -2,13 +2,13 @@ import { useEffect } from 'react';
 import { useAppContext } from "../../context/AppContext";
 import { convertToCSV } from '../../globals/GenerateCSV';
 const GameOverScreeen = () => {
-    const { simpleReactionTestScores, doubleReactionTestScores } = useAppContext()
+    const { simpleReactionTestScores, doubleReactionTestScores, user } = useAppContext()
     useEffect(() => {
-        
+
     }, [])
-    
+
     const downloadScores = () => {
-        const csv = convertToCSV(simpleReactionTestScores, doubleReactionTestScores)
+        const csv = convertToCSV(simpleReactionTestScores, doubleReactionTestScores, user)
         const blob = new Blob([csv], { type: 'text/csv' })
         const url = window.URL.createObjectURL(blob)
         const a = document.createElement('a')
@@ -26,7 +26,7 @@ const GameOverScreeen = () => {
                 GAME OVER
             </h1>
             <button onClick={() => downloadScores()}
-            className= "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
             >Download</button>
             <p>download you results.</p>
         </div>

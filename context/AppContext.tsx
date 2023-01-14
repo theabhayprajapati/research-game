@@ -1,9 +1,10 @@
 import React from 'react';
+import { TUser } from '../globals/types';
 
 const AppContext = React.createContext(
     {
         gameModeOne: true,
-        user: {},
+        user: {} as TUser,
         setUser: any => { },
         setGameModeOne: any => { },
         gameStarted: false,

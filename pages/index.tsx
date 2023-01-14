@@ -11,13 +11,13 @@ export default function Home() {
     event.target.blur();
   };
   const handleOnchangeUser = (event) => {
-    if(event.target.name === 'name'){
+    if (event.target.name === 'name') {
       setUser({
         ...user,
         name: event.target.value
       })
     }
-    if(event.target.name === 'age'){
+    if (event.target.name === 'age') {
       setUser({
         ...user,
         age: event.target.value
@@ -54,7 +54,9 @@ export default function Home() {
               id="name"
               className="border border-gray-300 p-2 rounded-md"
             />
-            <span className="text-xs text-red-500">Name is required</span>
+            {
+              user.name === '' && <span className="text-xs text-red-500">Name is required</span>
+            }
           </div>
           <div className="flex flex-col">
             <label htmlFor="age">Age</label>
@@ -67,7 +69,10 @@ export default function Home() {
               id="age"
               className="border border-gray-300 p-2 rounded-md"
             />
-            <span className="text-xs text-red-500">Age is required</span>
+            {
+              user.age < 1 && <span className="text-xs text-red-500">Age is required</span>
+            }
+
           </div>
 
         </div>
