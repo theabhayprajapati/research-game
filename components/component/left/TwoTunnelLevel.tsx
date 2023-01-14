@@ -143,7 +143,6 @@ const TwoTunnelLevel = () => {
             const { y } = marioRef.current?.getBoundingClientRect() || 0;
             if (y >= (400)) {
                 console.log("Milliseconds: ", milliseconds);
-                updateDoubleReactionTestScores(Number.parseInt(document.getElementById("stopwatch").innerText));
                 setShowMario(false);
                 setMilliseconds(0);
                 setIsRunning(false);
