@@ -42,7 +42,7 @@ const TwoTunnelLevel = () => {
         var side = generateRandomBooleanState();
         setShowMario(true);
         setMarioSide(side == true ? 'left' : 'right');
-        sleep(0).then(() => {
+        sleep(customRandomNumber()).then(() => {
             console.log(width);
             var marioXaxisLeft = (((width / 2) / 2) - MARIO_WIDTH / 2);
             var marioXaxisRight = (((width / 2) * 1.5) - MARIO_WIDTH / 2);
@@ -141,7 +141,7 @@ const TwoTunnelLevel = () => {
             /* use marioRef to get the x and y position and increase it */
             const { height } = leftContainerRef.current.getBoundingClientRect();
             const { y } = marioRef.current?.getBoundingClientRect() || 0;
-            if (y >= (400)) {
+            if (y >= (440)) {
                 console.log("Milliseconds: ", milliseconds);
                 setShowMario(false);
                 setMilliseconds(0);
