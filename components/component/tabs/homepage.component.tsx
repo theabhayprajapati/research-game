@@ -8,11 +8,8 @@ import OnboardingScreen from "./OnboardingScreen";
 const HomePage = () => {
     const [score, setScore] = useState([]);
     const { gameModeOne, setGameModeOne, gameStarted, setGameStarted, simpleReactionTestScores, doubleReactionTestScores, gameOver } = useAppContext();
-    useEffect(() => {
-        return () => console.log("gamemodeone", gameModeOne);
-    }, [gameModeOne]);
-    useEffect(() => {
-        /* check for  */
+    
+    useEffect(() => { 
         document.addEventListener("keydown", disableScrollOnSpace);
         return () => {
             document.removeEventListener("keydown", disableScrollOnSpace);

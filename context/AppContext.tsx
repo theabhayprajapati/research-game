@@ -54,14 +54,21 @@ export const AppContextProvider = ({ children }) => {
             testNumber: Number.parseInt(document.getElementById('simpleReactionTestScore').innerText),
             reactionTime: mill
         }
-
-        setSimpleReactionTestScores(prev => [...prev, score]);
+        if (score.testNumber < 5) {
+            return;
+        }
+        var newScore = {
+            testNumber: score.testNumber - 5,
+            reactionTime: score.reactionTime
+        }
+        setSimpleReactionTestScores(prev => [...prev, newScore]);
         /* print */
         console.log("simpleReactionTestScores", simpleReactionTestScores);
     }
 
     const [doubleReactionTestScores, setDoubleReactionTestScores] = React.useState<scoreT[]>([]);
     const updateDoubleReactionTestScores = (mill: number) => {
+        // if length of 
         console.log(mill, "called");
         console.log(testNumbers);
         setTestNumbers(prev => ({ ...prev, doubleReactionTest: prev.doubleReactionTest + 1 }))
@@ -69,18 +76,25 @@ export const AppContextProvider = ({ children }) => {
             testNumber: Number.parseInt(document.getElementById('doubleReactionTestScore').innerText),
             reactionTime: mill
         }
-
-        setDoubleReactionTestScores(prev => [...prev, score]);
+        if (score.testNumber < 5) {
+            console.log('not pushing..')
+            return;
+        }
+        var newScore = {
+            testNumber: score.testNumber - 5,
+            reactionTime: score.reactionTime
+        }
+        setDoubleReactionTestScores(prev => [...prev, newScore]);
         /* print */
         console.log("doubleReactionTestScores", doubleReactionTestScores);
     }
     React.useEffect(() => {
-        if (testNumbers.simpleReactionTest > 5) {
+        if (testNumbers.simpleReactionTest > 10) {
             setTimeout(() => {
                 return setGameModeOne(true);
             }, 1000)
         }
-        if (testNumbers.doubleReactionTest > 5) {
+        if (testNumbers.doubleReactionTest > 10) {
             setTimeout(() => {
                 setGameStarted(false);
                 return setGameOver(true);

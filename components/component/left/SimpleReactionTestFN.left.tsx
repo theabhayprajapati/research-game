@@ -81,7 +81,7 @@ const SimpleReactionTestFN = ({ setScore }) => {
         return () => clearInterval(interval);
     }, [marioCords]);
     useEffect(() => {
-        document.addEventListener("keydown", handleClickRemoveMario);
+          document.addEventListener("keydown", handleClickRemoveMario);
         return () => {
             document.removeEventListener("keydown", handleClickRemoveMario);
         };
@@ -105,7 +105,7 @@ const SimpleReactionTestFN = ({ setScore }) => {
                 setIsRunning(true);
                 setMilliseconds(0);
                 console.log(marioCords);
-            }, randomNumberBW(2000,10000));
+            }, randomNumberBW(0,0));
         }
     };
 
